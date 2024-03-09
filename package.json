@@ -2,7 +2,7 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "start": "index.js",
+  "start": "node index.js",
   "scripts": {
     "dev": "ts-node-dev src/server.ts"
   },
