@@ -2,9 +2,11 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "start": "index.js",
+  
   "scripts": {
-    "dev": "ts-node-dev src/server.ts"
+    "dev": "ts-node-dev src/server.ts",
+    "start": "node index.js",
+    "build": "rm-rf ./dist && tsc"
   },
   "keywords": [],
   "author": "",
