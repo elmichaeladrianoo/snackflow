@@ -8,30 +8,34 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DetailUserService = void 0;
-const prisma_1 = __importDefault(require("../../prisma"));
-class DetailUserService {
-    execute(user_id) {
+exports.DeleteUserService = void 0;
+const client_1 = require("@prisma/client");
+const prisma = new client_1.PrismaClient();
+class DeleteUserService {
+    deleteUserById(inId) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const user = yield prisma_1.default.user.findFirst({
+                const user = yield prisma.user.delete({
                     where: {
-                        id: user_id
-                    }
+                        id: inId.inId, // Acessando o ID diretamente
+                    },
                 });
-                return user;
+                //console.log('Usuário excluído:', user);
+                const ObjReturn = {
+                    nome: user.name,
+                    id: user.id,
+                    status: "Removido",
+                };
+                return ObjReturn;
             }
             catch (err) {
                 throw new Error(err);
             }
             finally {
-                yield prisma_1.default.$disconnect(); // sempre fechamos a conexão com DB.
+                yield prisma.$disconnect();
             }
         });
     }
 }
-exports.DetailUserService = DetailUserService;
+exports.DeleteUserService = DeleteUserService;

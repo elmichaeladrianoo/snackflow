@@ -4,7 +4,7 @@ import { verify } from 'jsonwebtoken';
 interface Payload{
     sub: string;
 }
-export function isAuthenticated(
+export function validateSession(
     req: Request,
     res: Response,
     next: NextFunction
@@ -24,11 +24,7 @@ try{
     const {sub} = verify(
         token,
         process.env.JWT_SECRET
-    )as Payload;
-
-      //recuperar o id do token e colocar dentro de uma variável user_id no req.  
-     req.user_id = sub;
-     
+    )as Payload;     
 
     return next();
 
