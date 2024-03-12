@@ -17,34 +17,42 @@ const prisma_1 = __importDefault(require("../../prisma"));
 const bcryptjs_1 = require("bcryptjs");
 class CreateUserService {
     execute(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ name, email, password }) {
-            if (name.length < 5) {
-                throw new Error("Nome inválido!");
-            }
-            if (!email) {
-                throw new Error("E-mail incorreto!");
-            }
-            const userAlreadyExists = yield prisma_1.default.user.findFirst({
-                where: {
-                    email: email
+        return __awaiter(this, arguments, void 0, function* ({ name, email, password, cpf, phone, address }) {
+            try {
+                if (name.length < 5) {
+                    throw new Error("Nome inválido!");
                 }
-            });
-            if (userAlreadyExists) {
-                throw new Error("E-mail já cadastrado!");
-            }
-            const passwordHash = yield (0, bcryptjs_1.hash)(password, 8);
-            const user = yield prisma_1.default.user.create({
-                data: {
-                    name: name,
-                    email: email,
-                    password: passwordHash,
-                },
-                select: {
-                    id: true,
-                    created_at: true,
+                if (!email.includes('@')) { // Verificar se o e-mail é válido
+                    throw new Error("E-mail incorreto!");
                 }
-            });
-            return user;
+                const userAlreadyExists = yield prisma_1.default.user.findFirst({
+                    where: {
+                        email: email
+                    }
+                });
+                if (userAlreadyExists) {
+                    throw new Error("E-mail já cadastrado!");
+                }
+                const passwordHash = yield (0, bcryptjs_1.hash)(password, 8);
+                const user = yield prisma_1.default.user.create({
+                    data: {
+                        name: name,
+                        email: email,
+                        password: passwordHash,
+                        cpf: cpf,
+                        phone: phone,
+                        address: address,
+                    },
+                    select: {
+                        id: true,
+                        created_at: true,
+                    }
+                });
+                return user;
+            }
+            catch (error) {
+                throw new Error("Erro ao criar usuário: " + error.message);
+            }
         });
     }
 }

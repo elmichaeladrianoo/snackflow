@@ -9,16 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DetailUserController = void 0;
-const DetailUserService_1 = require("../../services/user/DetailUserService");
-class DetailUserController {
-    handle(req, res) {
+exports.ListCategoryController = void 0;
+const ListCategoryService_1 = require("../../services/cetagory/ListCategoryService");
+class ListCategoryController {
+    getCategory(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user_id = req.user_id;
-            const detailUserService = new DetailUserService_1.DetailUserService();
-            const user = yield detailUserService.execute(parseInt(user_id));
-            return res.json(user);
+            const listCategoryService = new ListCategoryService_1.ListCategoryService();
+            const category = yield listCategoryService.execute();
+            return res.json(category);
         });
     }
 }
-exports.DetailUserController = DetailUserController;
+exports.ListCategoryController = ListCategoryController;

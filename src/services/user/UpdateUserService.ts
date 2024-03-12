@@ -3,7 +3,7 @@ import { Prisma, PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 class UpdateUserService {
-    async updateUserById(id: string, newData: Prisma.UserUpdateInput) {
+    async updateUserById(id: number, newData: Prisma.UserUpdateInput) {
         try {
             // Verifica se o campo a ser atualizado é o e-mail
             if ('email' in newData) {
@@ -22,19 +22,25 @@ class UpdateUserService {
                 }
             }
 
+            // Obtendo a data e hora atuais
+            const now = new Date();
+
+            // Atualizando o usuário incluindo a data atual
             const updatedUser = await prisma.user.update({
                 where: { id: id },
-                data: newData,
+                data: {
+                    ...newData,
+                    updated_at: now
+                }
             });
 
             const ObjReturn = {
                 status: "Atualizado",
-                conteudo:{updatedUser}
+                conteudo: { updatedUser }
             };
             return ObjReturn;
         } catch (error) {
             // Se ocorrer algum erro, retorna uma resposta de erro
-           
             throw new Error(error);
         } finally {
             await prisma.$disconnect();

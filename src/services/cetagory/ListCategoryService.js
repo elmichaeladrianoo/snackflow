@@ -8,17 +8,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DetailUserController = void 0;
-const DetailUserService_1 = require("../../services/user/DetailUserService");
-class DetailUserController {
-    handle(req, res) {
+exports.ListCategoryService = void 0;
+const prisma_1 = __importDefault(require("../../prisma"));
+class ListCategoryService {
+    execute() {
         return __awaiter(this, void 0, void 0, function* () {
-            const user_id = req.user_id;
-            const detailUserService = new DetailUserService_1.DetailUserService();
-            const user = yield detailUserService.execute(parseInt(user_id));
-            return res.json(user);
+            try {
+                const category = yield prisma_1.default.category.findMany({
+                //colocar clausulas where aqui futuramente ( status ativo, etc) 
+                });
+                return category;
+            }
+            catch (err) {
+                throw new Error(err);
+            }
+            finally {
+                yield prisma_1.default.$disconnect(); // sempre fechamos a conexão com DB.
+            }
         });
     }
 }
-exports.DetailUserController = DetailUserController;
+exports.ListCategoryService = ListCategoryService;

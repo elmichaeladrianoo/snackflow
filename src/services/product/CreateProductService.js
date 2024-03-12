@@ -8,24 +8,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateUserController = void 0;
-const CreateUserService_1 = require("../../services/user/CreateUserService");
-class CreateUserController {
-    handle(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const { name, email, password, cpf, phone, address } = req.body;
-            const createUserService = new CreateUserService_1.CreateUserService();
-            const user = yield createUserService.execute({
-                name,
-                email,
-                password,
-                cpf,
-                phone,
-                address
+exports.CreateProductservice = void 0;
+const prisma_1 = __importDefault(require("../../prisma"));
+class CreateProductservice {
+    execute(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ name, price, description, banner, category_id }) {
+            const product = yield prisma_1.default.product.create({
+                data: {
+                    name: name,
+                    price: price,
+                    description: description,
+                    banner: banner,
+                    category_id: category_id
+                }
             });
-            return res.json(user);
+            return product;
         });
     }
 }
-exports.CreateUserController = CreateUserController;
+exports.CreateProductservice = CreateProductservice;

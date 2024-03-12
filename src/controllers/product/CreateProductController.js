@@ -9,16 +9,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DetailUserController = void 0;
-const DetailUserService_1 = require("../../services/user/DetailUserService");
-class DetailUserController {
+exports.CreateProductController = void 0;
+const CreateProductService_1 = require("./../../services/product/CreateProductService");
+class CreateProductController {
     handle(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user_id = req.user_id;
-            const detailUserService = new DetailUserService_1.DetailUserService();
-            const user = yield detailUserService.execute(parseInt(user_id));
-            return res.json(user);
+            const { name, price, description, category_id } = req.body;
+            const createProductService = new CreateProductService_1.CreateProductservice();
+            if (!req.file) {
+                throw new Error("Imagem não anexada");
+            }
+            else {
+                const { originalname, filename: banner } = req.file;
+                const product = yield createProductService.execute({ name, price, description, banner, category_id });
+                return res.json(product);
+            }
         });
     }
 }
-exports.DetailUserController = DetailUserController;
+exports.CreateProductController = CreateProductController;

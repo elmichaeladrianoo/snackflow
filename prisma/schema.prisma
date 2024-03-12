@@ -1,79 +1,79 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider      = "prisma-client-js"
-  binaryTargets = ["native", "rhel-openssl-1.0.x"] // Adicione esta linha
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
 }
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-
-//criar uma migration: yarn prisma migrate dev  -- create-table-users
 model User {
-  id String @id @default(uuid())
+  id Int @id @default(autoincrement())
   name String
-  email String
+  email String @unique
   password String
-  created_at DateTime? @default(now())
-  updated_at DateTime? @default(now())
+  cpf String ?
+  phone String?
+  address String?
+  status Boolean @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   @@map("users")
 }
 
 model Category {
-   id String @id @default(uuid())
-   name String
-   created_at DateTime? @default(now())
-   updated_at DateTime? @default(now())
+  id Int @id @default(autoincrement())
+  name String @unique
+  status Boolean @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   @@map("categories")
   products Product[]
 }
 
 model Product {
-   id String @id @default(uuid())
-   name String
-   price String
-   description String
-   banner String
-   created_at DateTime? @default(now())
-   updated_at DateTime? @default(now())
-   category Category @relation(fields: [category_id], references:[id])
+  id Int @id @default(autoincrement())
+  name String
+  price Float
+  description String
+  banner String?
+  status Boolean @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  category_id Int
+  category Category @relation(fields: [category_id], references: [id])
+  items Item[]
 
   @@map("products")
-  category_id String
-  Items Item[]
 }
 
-model Order{
-  id String @id @default(uuid())
+model Order {
+  id Int @id @default(autoincrement())
   table Int
   status Boolean @default(false)
   draft Boolean @default(true)
-  name String? 
-  created_at DateTime? @default(now())
-  updated_at DateTime? @default(now())
- @@map("orders")
- Items Item[]
+  name String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("orders")
+  items Item[]
 }
 
-model Item{
-  id String @id @default(uuid())
+model Item {
+  id Int @id @default(autoincrement())
   amount Int
-  created_at DateTime? @default(now())
-  updated_at DateTime? @default(now())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("items")
 
   order   Order   @relation(fields: [order_id],references: [id])
   product Product @relation(fields: [product_id],references: [id])
 
-  @@map("items")
-
-  order_id String
-  product_id String
+  order_id Int
+  product_id Int
 }

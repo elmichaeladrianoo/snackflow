@@ -8,17 +8,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DetailUserController = void 0;
-const DetailUserService_1 = require("../../services/user/DetailUserService");
-class DetailUserController {
-    handle(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const user_id = req.user_id;
-            const detailUserService = new DetailUserService_1.DetailUserService();
-            const user = yield detailUserService.execute(parseInt(user_id));
-            return res.json(user);
+exports.ListProductByCategoryService = void 0;
+const prisma_1 = __importDefault(require("../../prisma"));
+class ListProductByCategoryService {
+    execute(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ category_id }) {
+            const findByCategory = yield prisma_1.default.product.findMany({
+                where: {
+                    category_id: category_id
+                }
+            });
+            return findByCategory;
         });
     }
 }
-exports.DetailUserController = DetailUserController;
+exports.ListProductByCategoryService = ListProductByCategoryService;

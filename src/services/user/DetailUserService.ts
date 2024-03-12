@@ -1,7 +1,7 @@
 import prismaClient from "../../prisma";
 
 class DetailUserService{
-    async execute (user_id:string){
+    async execute (user_id:number){
         
         try{
             const user = await prismaClient.user.findFirst({

@@ -8,24 +8,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateUserController = void 0;
-const CreateUserService_1 = require("../../services/user/CreateUserService");
-class CreateUserController {
-    handle(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const { name, email, password, cpf, phone, address } = req.body;
-            const createUserService = new CreateUserService_1.CreateUserService();
-            const user = yield createUserService.execute({
-                name,
-                email,
-                password,
-                cpf,
-                phone,
-                address
+exports.CreateCategoryService = void 0;
+const prisma_1 = __importDefault(require("../../prisma"));
+class CreateCategoryService {
+    execute(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ name }) {
+            if (name === "") {
+                throw new Error("Nome Inválido");
+            }
+            const category = yield prisma_1.default.category.create({
+                data: {
+                    name: name,
+                }, select: {
+                    id: true,
+                    name: true,
+                }
             });
-            return res.json(user);
+            return { category };
         });
     }
 }
-exports.CreateUserController = CreateUserController;
+exports.CreateCategoryService = CreateCategoryService;

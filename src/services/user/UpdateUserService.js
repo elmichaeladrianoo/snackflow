@@ -32,9 +32,12 @@ class UpdateUserService {
                         throw new Error('E-mail em uso!');
                     }
                 }
+                // Obtendo a data e hora atuais
+                const now = new Date();
+                // Atualizando o usuário incluindo a data atual
                 const updatedUser = yield prisma.user.update({
                     where: { id: id },
-                    data: newData,
+                    data: Object.assign(Object.assign({}, newData), { updated_at: now })
                 });
                 const ObjReturn = {
                     status: "Atualizado",

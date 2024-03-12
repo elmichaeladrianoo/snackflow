@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 
 interface UserRequest {
-    inId: string;
+    inId: number;
 }
 
 const prisma = new PrismaClient();

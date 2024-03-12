@@ -19,33 +19,40 @@ const jsonwebtoken_1 = require("jsonwebtoken");
 class AuthUserService {
     execute(_a) {
         return __awaiter(this, arguments, void 0, function* ({ email, password }) {
-            //validar se o email existe  
-            const user = yield prisma_1.default.user.findFirst({
-                where: {
-                    email: email
+            try {
+                // Validar se o email existe  
+                const user = yield prisma_1.default.user.findFirst({
+                    where: {
+                        email: email
+                    }
+                });
+                if (!user) {
+                    throw new Error("Usuário ou senha incorreto(s)");
                 }
-            });
-            if (!user) {
-                throw new Error("Usuario ou senha incorreto(s)");
+                // Validar a senha
+                const passwordMatch = yield (0, bcryptjs_1.compare)(password, user.password);
+                if (!passwordMatch) {
+                    throw new Error("Usuário ou senha incorreto(s)");
+                }
+                // Gerar token JWT e devolver os dados do usuário
+                const token = (0, jsonwebtoken_1.sign)({
+                    name: user.name,
+                    email: user.email
+                }, process.env.JWT_SECRET || '', // Corrigido: adicionei uma string vazia como fallback
+                {
+                    subject: user.id.toString(), // Corrigido: converti para string
+                    expiresIn: '30d'
+                });
+                return {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    token: token
+                };
             }
-            //validação de senha
-            const passwordMatch = yield (0, bcryptjs_1.compare)(password, user.password);
-            if (!passwordMatch) {
-                throw new Error("Usuario ou senha incorreto(s)");
+            catch (error) {
+                throw new Error("Erro ao autenticar usuário: " + error.message);
             }
-            //gerar token JWT e devolver os dados do usuário
-            const token = (0, jsonwebtoken_1.sign)({
-                name: user.name,
-                email: user.email
-            }, process.env.JWT_SECRET, { subject: user.id,
-                expiresIn: '30d'
-            });
-            return {
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                token: token
-            };
         });
     }
 }
