@@ -16,14 +16,14 @@ exports.CreateProductservice = void 0;
 const prisma_1 = __importDefault(require("../../prisma"));
 class CreateProductservice {
     execute(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ name, price, description, banner, category_id }) {
+        return __awaiter(this, arguments, void 0, function* ({ name, price, description, banner, categoryId }) {
             const product = yield prisma_1.default.product.create({
                 data: {
                     name: name,
                     price: price,
                     description: description,
                     banner: banner,
-                    category_id: category_id
+                    category_id: categoryId
                 }
             });
             return product;

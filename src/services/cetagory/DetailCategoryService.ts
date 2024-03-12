@@ -11,7 +11,10 @@ class DetailCategoryService{
                 },select:{
 
                     id: true,
-                    name: true
+                    name: true,
+                    status:true,
+                    created_at:true,
+                    updated_at:true
                 }
                 
 
