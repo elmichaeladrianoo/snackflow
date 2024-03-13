@@ -12,22 +12,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateProductservice = void 0;
+exports.CreateProductService = void 0;
 const prisma_1 = __importDefault(require("../../prisma"));
-class CreateProductservice {
-    execute(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ name, price, description, banner, categoryId }) {
+class CreateProductService {
+    createProduct(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ name, price, description, bannerBase64, categoryId }) {
+            // Decodificar a string base64 em um buffer
+            //const bannerBuff = Buffer.from(bannerBase64, 'base64');
+            // Salvar o produto no banco de dados usando Prisma
             const product = yield prisma_1.default.product.create({
                 data: {
                     name: name,
                     price: price,
                     description: description,
-                    banner: banner,
+                    banner: bannerBase64, // Salvar o conteúdo base64 diretamente
                     category_id: categoryId
+                },
+                include: {
+                    category: true
                 }
             });
-            return product;
+            // Formatando a resposta para incluir o campo banner como base64
+            const productWithBase64Banner = Object.assign(Object.assign({}, product), { banner: bannerBase64 });
+            return productWithBase64Banner;
         });
     }
 }
-exports.CreateProductservice = CreateProductservice;
+exports.CreateProductService = CreateProductService;

@@ -9,21 +9,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateProductController = void 0;
-const CreateProductService_1 = require("./../../services/product/CreateProductService");
-class CreateProductController {
-    createProduct(req, res) {
+exports.DeleteProductController = void 0;
+const DeleteProductService_1 = require("./../../services/product/DeleteProductService");
+class DeleteProductController {
+    deleteProductById(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const productService = new CreateProductService_1.CreateProductService();
-            const { name, price, description, bannerBase64, categoryId } = req.body;
-            try {
-                const product = yield productService.createProduct({ name, price, description, bannerBase64, categoryId });
-                res.status(201).json({ message: 'Produto criado com sucesso.', product });
-            }
-            catch (error) {
-                res.status(500).json({ error: 'Falha ao criar produto.' });
-            }
+            const { id } = req.body;
+            const deleteProductService = new DeleteProductService_1.DeleteProductService();
+            const ObjReturn = yield deleteProductService.deleteProductById({ id });
+            return res.status(200).json(ObjReturn);
         });
     }
 }
-exports.CreateProductController = CreateProductController;
+exports.DeleteProductController = DeleteProductController;

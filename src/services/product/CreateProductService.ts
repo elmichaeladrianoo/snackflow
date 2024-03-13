@@ -4,24 +4,37 @@ interface ProductRequest {
     name: string;
     price: number;
     description: string;
-    banner: string;
+    bannerBase64: string;
     categoryId: number;
 }
 
-class CreateProductservice {
-    async execute({ name, price, description, banner, categoryId }: ProductRequest) {
-       
+class CreateProductService {
+    async createProduct({ name, price, description, bannerBase64, categoryId }: ProductRequest) {
+        // Decodificar a string base64 em um buffer
+        //const bannerBuff = Buffer.from(bannerBase64, 'base64');
+
+        // Salvar o produto no banco de dados usando Prisma
         const product = await prismaClient.product.create({
             data: {
                 name: name,
                 price: price,
                 description: description,
-                banner: banner,
+                banner: bannerBase64, // Salvar o conteúdo base64 diretamente
                 category_id: categoryId
+            },
+            include: {
+                category: true
             }
         });
-        return product;
+
+        // Formatando a resposta para incluir o campo banner como base64
+        const productWithBase64Banner = {
+            ...product,
+            banner: bannerBase64
+        };
+
+        return productWithBase64Banner;
     }
 }
 
-export { CreateProductservice };
+export { CreateProductService };

@@ -9,21 +9,32 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateProductController = void 0;
-const CreateProductService_1 = require("./../../services/product/CreateProductService");
-class CreateProductController {
-    createProduct(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const productService = new CreateProductService_1.CreateProductService();
-            const { name, price, description, bannerBase64, categoryId } = req.body;
+exports.DeleteProductService = void 0;
+const client_1 = require("@prisma/client");
+const prisma = new client_1.PrismaClient();
+class DeleteProductService {
+    deleteProductById(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ id }) {
             try {
-                const product = yield productService.createProduct({ name, price, description, bannerBase64, categoryId });
-                res.status(201).json({ message: 'Produto criado com sucesso.', product });
+                const product = yield prisma.product.delete({
+                    where: {
+                        id: id,
+                    },
+                });
+                const ObjReturn = {
+                    nome: product.name,
+                    id: product.id,
+                    status: "Removido",
+                };
+                return ObjReturn;
             }
-            catch (error) {
-                res.status(500).json({ error: 'Falha ao criar produto.' });
+            catch (err) {
+                throw new Error(err);
+            }
+            finally {
+                yield prisma.$disconnect();
             }
         });
     }
 }
-exports.CreateProductController = CreateProductController;
+exports.DeleteProductService = DeleteProductService;

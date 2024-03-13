@@ -21,6 +21,7 @@ const DetailCategoryController_1 = require("./controllers/category/DetailCategor
 const CreateProductController_1 = require("./controllers/product/CreateProductController");
 const ListProductByCategoryController_1 = require("./controllers/product/ListProductByCategoryController");
 const multer_2 = __importDefault(require("./config/multer"));
+const DeleteProductController_1 = require("./controllers/product/DeleteProductController");
 const router = (0, express_1.Router)();
 exports.router = router;
 const upload = (0, multer_1.default)(multer_2.default.upload("./tmp"));
@@ -38,5 +39,6 @@ router.post('/category.CategoryCreate', validateSession_1.validateSession, new C
 router.get('/category.categories', validateSession_1.validateSession, new ListCategoryController_1.ListCategoryController().getCategory);
 router.get('/category.category', validateSession_1.validateSession, new DetailCategoryController_1.DetailCategoryController().handle);
 // Rotas PRODUCTS
-router.post('/product.productCreate', validateSession_1.validateSession, upload.single('file'), new CreateProductController_1.CreateProductController().handle);
+router.post('/product.productCreate', validateSession_1.validateSession, upload.single('file'), new CreateProductController_1.CreateProductController().createProduct);
 router.get('/product.products', validateSession_1.validateSession, new ListProductByCategoryController_1.ListProductByCategoryController().getProductsByCategory);
+router.delete('/product.productRemove', validateSession_1.validateSession, new DeleteProductController_1.DeleteProductController().deleteProductById);
