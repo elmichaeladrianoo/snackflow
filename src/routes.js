@@ -22,6 +22,7 @@ const CreateProductController_1 = require("./controllers/product/CreateProductCo
 const ListProductByCategoryController_1 = require("./controllers/product/ListProductByCategoryController");
 const multer_2 = __importDefault(require("./config/multer"));
 const DeleteProductController_1 = require("./controllers/product/DeleteProductController");
+const UpdateProducrController_1 = require("./controllers/product/UpdateProducrController");
 const router = (0, express_1.Router)();
 exports.router = router;
 const upload = (0, multer_1.default)(multer_2.default.upload("./tmp"));
@@ -41,4 +42,5 @@ router.get('/category.category', validateSession_1.validateSession, new DetailCa
 // Rotas PRODUCTS
 router.post('/product.productCreate', validateSession_1.validateSession, upload.single('file'), new CreateProductController_1.CreateProductController().createProduct);
 router.get('/product.products', validateSession_1.validateSession, new ListProductByCategoryController_1.ListProductByCategoryController().getProductsByCategory);
+router.put('/product.updateProduct', validateSession_1.validateSession, new UpdateProducrController_1.UpdateProductController().updateProductById);
 router.delete('/product.productRemove', validateSession_1.validateSession, new DeleteProductController_1.DeleteProductController().deleteProductById);
