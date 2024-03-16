@@ -3,12 +3,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.router = void 0;
 const express_1 = require("express");
 const status_1 = require("./controllers/status/status");
+const CreateUserController_1 = require("./controllers/user/CreateUserController");
 const AuthUserController_1 = require("./controllers/user/AuthUserController");
 const DetailUserController_1 = require("./controllers/user/DetailUserController");
 const DeleteUserController_1 = require("./controllers/user/DeleteUserController");
 const UpdateUserConttroller_1 = require("./controllers/user/UpdateUserConttroller");
 const ListUsersController_1 = require("./controllers/user/ListUsersController");
 const isAuthenticated_1 = require("./middlewares/isAuthenticated");
+const validateFieldsMiddleware_1 = require("./middlewares/validateFieldsMiddleware");
 const CreateCategoryController_1 = require("./controllers/category/CreateCategoryController");
 const ListCategoryController_1 = require("./controllers/category/ListCategoryController");
 const DetailCategoryController_1 = require("./controllers/category/DetailCategoryController");
@@ -23,6 +25,7 @@ exports.router = router;
 //Rotas Status
 router.get('/summary', new status_1.GetStatus().status);
 //Rotas USER 
+router.post('/user.userCreate', validateFieldsMiddleware_1.isMaskValid, new CreateUserController_1.CreateUserController().handle);
 router.post('/user.auth.login', new AuthUserController_1.AuthUserController().handle);
 router.get('/user.auth.userSession', isAuthenticated_1.isAuthenticated, new DetailUserController_1.DetailUserController().handle);
 router.get('/user.users', isAuthenticated_1.isAuthenticated, new ListUsersController_1.ListUsersController().getUser);

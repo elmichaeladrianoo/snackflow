@@ -27,11 +27,14 @@ class CreateUserService {
                 }
                 const userAlreadyExists = yield prisma_1.default.user.findFirst({
                     where: {
-                        email: email
+                        OR: [
+                            { email: email },
+                            { cpf: cpf }
+                        ]
                     }
                 });
                 if (userAlreadyExists) {
-                    throw new Error("E-mail já cadastrado!");
+                    throw new Error("CPF/E-mail já cadastrado!");
                 }
                 const passwordHash = yield (0, bcryptjs_1.hash)(password, 8);
                 const user = yield prisma_1.default.user.create({
@@ -50,8 +53,8 @@ class CreateUserService {
                 });
                 return user;
             }
-            catch (error) {
-                throw new Error("Erro ao criar usuário: " + error.message);
+            catch (err) {
+                throw err; // Permitir que o erro original seja propagado
             }
         });
     }

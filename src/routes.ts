@@ -7,7 +7,7 @@ import { DeleteUserController }             from './controllers/user/DeleteUserC
 import { UpdateUserController }             from './controllers/user/UpdateUserConttroller';
 import { ListUsersController }              from './controllers/user/ListUsersController';
 import { isAuthenticated}                   from './middlewares/isAuthenticated';
-import { validateSession }                  from './middlewares/validateSession';
+import { isMaskValid }                  from './middlewares/validateFieldsMiddleware';
 import { CreateCategoryController }         from './controllers/category/CreateCategoryController';
 import { ListCategoryController }           from './controllers/category/ListCategoryController'
 import { DetailCategoryController }         from './controllers/category/DetailCategoryController';
@@ -24,6 +24,7 @@ const router = Router();
 router.get('/summary', new GetStatus().status)
 
 //Rotas USER 
+router.post('/user.userCreate',isMaskValid, new CreateUserController().handle)
 router.post('/user.auth.login', new AuthUserController().handle)
 router.get('/user.auth.userSession', isAuthenticated,  new DetailUserController().handle)
 router.get('/user.users', isAuthenticated , new ListUsersController().getUser)

@@ -23,12 +23,15 @@ class CreateUserService {
 
             const userAlreadyExists = await prismaClient.user.findFirst({
                 where: {
-                    email: email
+                    OR: [
+                        { email: email },
+                        { cpf: cpf }
+                    ]
                 }
             });
 
             if (userAlreadyExists) {
-                throw new Error("E-mail já cadastrado!");
+                throw new Error("CPF/E-mail já cadastrado!");
             }
 
             const passwordHash = await hash(password, 8);
@@ -49,8 +52,8 @@ class CreateUserService {
             });
 
             return user;
-        } catch (error) {
-            throw new Error("Erro ao criar usuário: " + error.message);
+        } catch (err) {
+            throw err; // Permitir que o erro original seja propagado
         }
     }
 }

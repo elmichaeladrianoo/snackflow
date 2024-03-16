@@ -11,20 +11,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateUserController = void 0;
 const CreateUserService_1 = require("../../services/user/CreateUserService");
+const dataValidator_1 = require("../../util/dataValidator");
 class CreateUserController {
     handle(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { name, email, password, cpf, phone, address } = req.body;
-            const createUserService = new CreateUserService_1.CreateUserService();
-            const user = yield createUserService.execute({
-                name,
-                email,
-                password,
-                cpf,
-                phone,
-                address
-            });
-            return res.json(user);
+            try {
+                const { name, email, password, cpf, phone, address } = req.body;
+                // Formatar o CPF antes de passá-lo para o serviço
+                const cpfw = (0, dataValidator_1.CpfFormat)(cpf);
+                const createUserService = new CreateUserService_1.CreateUserService();
+                const user = yield createUserService.execute({
+                    name,
+                    email,
+                    password,
+                    cpf: cpfw,
+                    phone,
+                    address
+                });
+                return res.json(user);
+            }
+            catch (err) {
+                // Se ocorrer algum erro, retornar uma mensagem de erro
+                console.error("Erro ao criar usuário:", err);
+                return res.status(500).json({ error: "Erro interno do servidor" });
+            }
         });
     }
 }
