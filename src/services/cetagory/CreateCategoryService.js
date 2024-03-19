@@ -16,16 +16,18 @@ exports.CreateCategoryService = void 0;
 const prisma_1 = __importDefault(require("../../prisma"));
 class CreateCategoryService {
     execute(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ name }) {
+        return __awaiter(this, arguments, void 0, function* ({ name, company_id }) {
             if (name === "") {
                 throw new Error("Nome Inválido");
             }
             const category = yield prisma_1.default.category.create({
                 data: {
                     name: name,
+                    company_id: company_id
                 }, select: {
                     id: true,
                     name: true,
+                    company_id: true
                 }
             });
             return { category };

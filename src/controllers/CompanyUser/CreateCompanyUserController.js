@@ -9,25 +9,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateUserController = void 0;
-const CreateUserService_1 = require("../../services/user/CreateUserService");
-const dataValidator_1 = require("../../util/dataValidator");
-class CreateUserController {
-    handle(req, res) {
+exports.CreateCompanyUserController = void 0;
+const CreateCompanyUserService_1 = require("./../../services/companyUser/CreateCompanyUserService");
+class CreateCompanyUserController {
+    createCompanyUser(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { name, email, password, cpf, phone, address } = req.body;
-            const cpfw = (0, dataValidator_1.CpfFormat)(cpf);
-            const createUserService = new CreateUserService_1.CreateUserService();
-            const user = yield createUserService.execute({
-                name,
-                email,
-                password,
-                cpf: cpfw,
-                phone,
-                address
-            });
-            return res.json(user);
+            const { user_id, company_id } = req.body;
+            const createCompanyUserService = new CreateCompanyUserService_1.CreateCompanyUserService();
+            const companyUser = yield createCompanyUserService.createCompanyUser({ user_id, company_id });
+            res.json(companyUser);
         });
     }
 }
-exports.CreateUserController = CreateUserController;
+exports.CreateCompanyUserController = CreateCompanyUserController;

@@ -1,11 +1,12 @@
 import prismaClient from "../../prisma"
 interface CategoryRequest{
     name: string;
+    company_id: number;
 
 }
 
 class CreateCategoryService{
-    async execute({name}:CategoryRequest){
+    async execute({name, company_id}:CategoryRequest){
    
 
         if(name ===""){
@@ -16,9 +17,11 @@ class CreateCategoryService{
 
             data:{
                 name:name,
+                company_id:company_id
             }, select:{
                 id: true,
                 name: true,
+                company_id:true
 
             }
 

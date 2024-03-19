@@ -27,7 +27,7 @@ app.use((err: Error, req: Request, res: Response, next:NextFunction)=>{
     }
 
     return res.status(500).json({
-        status: 'error',
+        status: 'Error',
         message: 'Internal server error.'
 
 
@@ -35,4 +35,4 @@ app.use((err: Error, req: Request, res: Response, next:NextFunction)=>{
 
 })
 
-app.listen(3333, ()=> console.log('servidor online!'));
+app.listen(3333, ()=> console.log('The server SnackFlow is running and available'));

@@ -1,6 +1,7 @@
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "rhel-openssl-1.0.x"]
+  generateMigration = false
 }
 
 datasource db {
@@ -19,20 +20,61 @@ model User {
   status Boolean @default(true)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-
+  companyUsers  CompanyUser[]
   @@map("users")
 }
 
+model Company {
+  id              Int       @id @default(autoincrement())
+  corporateReason String?
+  fantasyName     String?
+  CNPJ            String?
+  address         String?
+  cep             String?
+  number          String?
+  city            String?
+  state           String?
+  country         String?
+  phone           String?
+  email           String    @db.VarChar(255) // Definindo o tamanho máximo para 255 caracteres
+  website         String?   @db.VarChar(255) 
+  status          Boolean   @default(true)
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+  companyUsers    CompanyUser[]
+  categories      Category[]
+  orders          Order[]
+  commands        Command[]
+  @@map("Companies")
+}
+
+
+model CompanyUser{
+  id Int      @id @default(autoincrement())
+  user_id     Int
+  company_id  Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  company Company @relation(fields: [company_id], references: [id])
+  user User @relation(fields: [user_id], references: [id])
+  
+@@map("CompanyUsers")
+}
+
+
 model Category {
   id Int @id @default(autoincrement())
-  name String @unique
+  name   String @unique
   status Boolean @default(true)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-
+  company_id Int
+  company Company @relation(fields: [company_id], references: [id])
   @@map("categories")
   products Product[]
 }
+
+
 
 model Product {
   id Int @id @default(autoincrement())
@@ -50,7 +92,7 @@ model Product {
   @@map("products")
 }
 
-model Order {
+model Order { // cada pessoa da mesa  pode fazer um pedido. O pedido é finalizado quando o garçon entrega. 
   id Int @id @default(autoincrement())
   table Int
   status Boolean @default(false)
@@ -58,7 +100,12 @@ model Order {
   name String?
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-
+  applyDiscount   Boolean @default(false)
+  percentDiscount Float?
+  previousTotAmount  Float?
+  finallyTotAmount Float?
+  company_id Int
+  company Company @relation(fields: [company_id],references: [id])
   @@map("orders")
   items Item[]
 }
@@ -74,6 +121,34 @@ model Item {
   order   Order   @relation(fields: [order_id],references: [id])
   product Product @relation(fields: [product_id],references: [id])
 
-  order_id Int
+  order_id   Int
   product_id Int
+}
+
+
+
+model Command{ // cada pessoa da mesa terá uma comanda, cada comanda poderá conter mais de um pedido
+  id Int            @id @default(autoincrement())
+  nameAlias          String?
+  available          Boolean @default(false) // se está em uso no momento.
+  company_id         Int
+  virtual            Boolean @default(false) // se é uma comanda virtual ou se é uma comanda física 
+  finallyTotAmount   Float? //preço final da comanda
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  company Company @relation(fields: [company_id],references: [id])
+  transactionCommand TransactionCommand[]
+ @@map("commands")
+}
+
+model TransactionCommand{ // cada comanda precisará ser paga na frente de caixa para mudança do status available.   
+  id Int            @id @default(autoincrement())
+  AlreadyPaid        Boolean @default(false)
+  applyDiscount      Boolean @default(false) // a comanda poderá ter um desconto dependendo da situação.
+  percentDiscount    Float?
+  previousTotAmount  Float? //preço calculado das comandas.
+  finallyTotAmount   Float? // preço final aplicado - pode haver diferença em caso de desconto.
+  command_id        Int
+  command Command @relation(fields: [command_id], references: [id]) 
+  @@map("transactionCommands")
 }

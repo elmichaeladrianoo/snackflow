@@ -9,16 +9,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateCategoryController = void 0;
-const CreateCategoryService_1 = require("../../services/cetagory/CreateCategoryService");
-class CreateCategoryController {
-    handle(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const createCategoryService = new CreateCategoryService_1.CreateCategoryService();
-            const { name, company_id } = req.body;
-            const category = yield createCategoryService.execute({ name, company_id });
-            return req.res.json(category);
+exports.ListCompanyFromUserService = void 0;
+const client_1 = require("@prisma/client");
+const prismaClient = new client_1.PrismaClient();
+class ListCompanyFromUserService {
+    listCompanyUser(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ user_id, company_id }) {
+            const companyUser = yield prismaClient.companyUser.findMany({
+                where: {
+                    OR: [
+                        { user_id: user_id },
+                        { company_id: company_id }
+                    ]
+                }, select: {
+                    user_id: true,
+                    company_id: true
+                }
+            });
+            return companyUser;
         });
     }
 }
-exports.CreateCategoryController = CreateCategoryController;
+exports.ListCompanyFromUserService = ListCompanyFromUserService;

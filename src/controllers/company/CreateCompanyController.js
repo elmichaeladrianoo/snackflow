@@ -9,25 +9,29 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateUserController = void 0;
-const CreateUserService_1 = require("../../services/user/CreateUserService");
-const dataValidator_1 = require("../../util/dataValidator");
-class CreateUserController {
-    handle(req, res) {
+exports.CreateCompanyController = void 0;
+const CreateCompanyService_1 = require("../../services/company/CreateCompanyService");
+class CreateCompanyController {
+    createCompany(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { name, email, password, cpf, phone, address } = req.body;
-            const cpfw = (0, dataValidator_1.CpfFormat)(cpf);
-            const createUserService = new CreateUserService_1.CreateUserService();
-            const user = yield createUserService.execute({
-                name,
-                email,
-                password,
-                cpf: cpfw,
+            const { corporateReason, fantasyName, CNPJ, address, cep, number, city, state, country, phone, email, website } = req.body;
+            const createCompanyService = new CreateCompanyService_1.CreateCompanyService();
+            const company = yield createCompanyService.createCompany({
+                corporateReason,
+                fantasyName,
+                CNPJ,
+                address,
+                cep,
+                number,
+                city,
+                state,
+                country,
                 phone,
-                address
+                email,
+                website
             });
-            return res.json(user);
+            return res.json(company);
         });
     }
 }
-exports.CreateUserController = CreateUserController;
+exports.CreateCompanyController = CreateCompanyController;

@@ -9,25 +9,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateUserController = void 0;
-const CreateUserService_1 = require("../../services/user/CreateUserService");
-const dataValidator_1 = require("../../util/dataValidator");
-class CreateUserController {
-    handle(req, res) {
+exports.ListCompanyController = void 0;
+const ListCompanyService_1 = require("./../../services/company/ListCompanyService");
+class ListCompanyController {
+    listCompany(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { name, email, password, cpf, phone, address } = req.body;
-            const cpfw = (0, dataValidator_1.CpfFormat)(cpf);
-            const createUserService = new CreateUserService_1.CreateUserService();
-            const user = yield createUserService.execute({
-                name,
-                email,
-                password,
-                cpf: cpfw,
-                phone,
-                address
-            });
-            return res.json(user);
+            const { id, CNPJ, email, corporateReason, fantasyName, cep, city, state, country } = req.body;
+            const listCompanyService = new ListCompanyService_1.ListCompanyService();
+            const listcompany = yield listCompanyService.listCompany({ id, CNPJ, email, corporateReason, fantasyName, cep, city, state, country });
+            return res.json(listcompany);
         });
     }
 }
-exports.CreateUserController = CreateUserController;
+exports.ListCompanyController = ListCompanyController;
