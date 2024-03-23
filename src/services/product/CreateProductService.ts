@@ -10,8 +10,11 @@ interface ProductRequest {
 
 class CreateProductService {
     async createProduct({ name, price, description, bannerBase64, categoryId }: ProductRequest) {
-        // Decodificar a string base64 em um buffer
-        //const bannerBuff = Buffer.from(bannerBase64, 'base64');
+
+        if (price <= 0){
+            throw new Error('Preço do produto precisa ser maior que zero!');
+        }
+
 
         // Salvar o produto no banco de dados usando Prisma
         const product = await prismaClient.product.create({

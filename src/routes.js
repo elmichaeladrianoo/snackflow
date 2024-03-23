@@ -25,11 +25,23 @@ const ListCompanyController_1 = require("./controllers/company/ListCompanyContro
 const UpdateCompanyController_1 = require("./controllers/company/UpdateCompanyController");
 const CreateCompanyUserController_1 = require("./controllers/CompanyUser/CreateCompanyUserController");
 const ListCompanyFromUserController_1 = require("./controllers/CompanyUser/ListCompanyFromUserController");
+const CreateOrderController_1 = require("./controllers/order/CreateOrderController");
+const DeleteOrderController_1 = require("./controllers/order/DeleteOrderController");
+const CreateOrderItemController_1 = require("./controllers/orderItem/CreateOrderItemController");
+const DeleteOrderItemController_1 = require("./controllers/orderItem/DeleteOrderItemController");
+const ListOrderController_1 = require("./controllers/order/ListOrderController");
+const ListOrderItensController_1 = require("./controllers/orderItem/ListOrderItensController");
+const DeleteCompanyUserController_1 = require("./controllers/CompanyUser/DeleteCompanyUserController");
+const CloseOrderController_1 = require("./controllers/order/CloseOrderController");
+const FinishOrderController_1 = require("./controllers/order/FinishOrderController");
+const CreateCommandController_1 = require("./controllers/Command/CreateCommandController");
+const UpdateCommandController_1 = require("./controllers/Command/UpdateCommandController");
+const ListCommandByTableController_1 = require("./controllers/Command/ListCommandByTableController");
 const router = (0, express_1.Router)();
 exports.router = router;
-//Rotas Status
+// Rotas Status
 router.get('/summary', new status_1.GetStatus().status);
-//Rotas USER 
+// Rotas USER
 router.post('/user.userCreate', validateFieldsMiddleware_1.isMaskValid, new CreateUserController_1.CreateUserController().handle);
 router.post('/user.auth.login', new AuthUserController_1.AuthUserController().handle);
 router.get('/user.auth.userSession', (0, isAuthenticated_1.isAuthenticated)(false), new DetailUserController_1.DetailUserController().handle);
@@ -47,10 +59,25 @@ router.post('/product.productCreate', (0, isAuthenticated_1.isAuthenticated)(fal
 router.get('/product.products', (0, isAuthenticated_1.isAuthenticated)(false), new ListProductByCategoryController_1.ListProductByCategoryController().getProductsByCategory);
 router.put('/product.updateProduct', (0, isAuthenticated_1.isAuthenticated)(false), new UpdateProducrController_1.UpdateProductController().updateProductById);
 router.delete('/product.productRemove', (0, isAuthenticated_1.isAuthenticated)(false), new DeleteProductController_1.DeleteProductController().deleteProductById);
-//Rotas Companies
+// Rotas Companies
 router.post('/company.companyCreate', (0, isAuthenticated_1.isAuthenticated)(false), new CreateCompanyController_1.CreateCompanyController().createCompany);
 router.get('/company.companies', (0, isAuthenticated_1.isAuthenticated)(false), new ListCompanyController_1.ListCompanyController().listCompany);
 router.put('/company.updateCompany', (0, isAuthenticated_1.isAuthenticated)(false), new UpdateCompanyController_1.UpdateCompanyController().UpdateUser);
-//RotasCompanyUser
-router.post('/companyUser.linkUserCompany', isAuthenticated_1.isAuthenticated, new CreateCompanyUserController_1.CreateCompanyUserController().createCompanyUser);
-router.get('/companyUser.companyUser', isAuthenticated_1.isAuthenticated, new ListCompanyFromUserController_1.ListCompanyFromUserController().listCompanyUser);
+// RotasCompanyUser
+router.post('/companyUser.linkUserCompany', (0, isAuthenticated_1.isAuthenticated)(false), new CreateCompanyUserController_1.CreateCompanyUserController().createCompanyUser);
+router.get('/companyUser.companyUser', (0, isAuthenticated_1.isAuthenticated)(false), new ListCompanyFromUserController_1.ListCompanyFromUserController().listCompanyUser);
+router.delete('companyUser.userRemove', (0, isAuthenticated_1.isAuthenticated)(false), new DeleteCompanyUserController_1.DeleteCompanyUserControlle().deleteUserCompany);
+// Rotas Order
+router.post('/order.orderCreate', (0, isAuthenticated_1.isAuthenticated)(true), new CreateOrderController_1.CreateOrderController().createOrder);
+router.get('order.orders', (0, isAuthenticated_1.isAuthenticated)(false), new ListOrderController_1.ListOrderController().listOrder);
+router.delete('/order.orderRemove', (0, isAuthenticated_1.isAuthenticated)(false), new DeleteOrderController_1.DeleteOrderController().DeleteOrder);
+router.put('/order.orderClose', (0, isAuthenticated_1.isAuthenticated)(false), new CloseOrderController_1.CloseOrderController().closeOrder);
+router.put('/order.orderFinish', (0, isAuthenticated_1.isAuthenticated)(false), new FinishOrderController_1.FinishOrderController().finishOrder);
+// Rotas Item
+router.post('/order.orderItemAdd', (0, isAuthenticated_1.isAuthenticated)(false), new CreateOrderItemController_1.CreateOrderItemController().addItem);
+router.get('/order.orderItens', (0, isAuthenticated_1.isAuthenticated)(false), new ListOrderItensController_1.ListOrderItensController().listOrderItens);
+router.delete('/order.orderItemRemove', (0, isAuthenticated_1.isAuthenticated)(false), new DeleteOrderItemController_1.DeleteOrderItemController().DeleteOrderItem);
+// Rotas Command
+router.post('/command.commandCreate', (0, isAuthenticated_1.isAuthenticated)(false), new CreateCommandController_1.CreateCommandController().commandCreate);
+router.put('/command.updateCommand', (0, isAuthenticated_1.isAuthenticated)(false), new UpdateCommandController_1.UpdateCommandController().updateCommand);
+router.get('/command.commandsByTable', (0, isAuthenticated_1.isAuthenticated)(false), new ListCommandByTableController_1.ListCommandByTableController().listCommand);

@@ -105,7 +105,9 @@ model Order { // cada pessoa da mesa  pode fazer um pedido. O pedido é finaliza
   previousTotAmount  Float?
   finallyTotAmount Float?
   company_id Int
+  command_id Int
   company Company @relation(fields: [company_id],references: [id])
+  command Command @relation(fields: [command_id],references: [id])
   @@map("orders")
   items Item[]
 }
@@ -138,8 +140,12 @@ model Command{ // cada pessoa da mesa terá uma comanda, cada comanda poderá co
   updated_at DateTime @updatedAt
   company Company @relation(fields: [company_id],references: [id])
   transactionCommand TransactionCommand[]
+  order Order[]
  @@map("commands")
 }
+
+
+
 
 model TransactionCommand{ // cada comanda precisará ser paga na frente de caixa para mudança do status available.   
   id Int            @id @default(autoincrement())
@@ -152,3 +158,4 @@ model TransactionCommand{ // cada comanda precisará ser paga na frente de caixa
   command Command @relation(fields: [command_id], references: [id]) 
   @@map("transactionCommands")
 }
+

@@ -9,16 +9,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ListCategoryController = void 0;
-const ListCategoryService_1 = require("../../services/cetagory/ListCategoryService");
-class ListCategoryController {
-    getCategory(req, res) {
+exports.CreateCommandController = void 0;
+const CreateCommandService_1 = require("./../../services/Command/CreateCommandService");
+class CreateCommandController {
+    commandCreate(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { company_id } = req.body;
-            const listCategoryService = new ListCategoryService_1.ListCategoryService();
-            const category = yield listCategoryService.execute({ company_id });
-            return res.json(category);
+            const { nameAlias, company_id, virtual } = req.body;
+            const createCommandService = new CreateCommandService_1.CreateCommandService();
+            const command = yield createCommandService.createCommand({ nameAlias, company_id, virtual });
+            return res.json(command);
         });
     }
 }
-exports.ListCategoryController = ListCategoryController;
+exports.CreateCommandController = CreateCommandController;

@@ -8,26 +8,39 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ListCategoryService = void 0;
-const prisma_1 = __importDefault(require("../../prisma"));
+const client_1 = require("@prisma/client");
+const prismaClient = new client_1.PrismaClient();
 class ListCategoryService {
-    execute() {
-        return __awaiter(this, void 0, void 0, function* () {
+    execute(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ company_id }) {
+            if (!company_id) {
+                throw new Error("Informe a Empresa!");
+            }
             try {
-                const category = yield prisma_1.default.category.findMany({
-                //colocar clausulas where aqui futuramente ( status ativo, etc) 
+                const company = yield prismaClient.company.findFirst({
+                    where: {
+                        id: company_id
+                    }
                 });
-                return category;
+                if (!company) {
+                    throw new Error("Empresa não encontrada.");
+                }
+                const categories = yield prismaClient.category.findMany({
+                    where: {
+                        company_id: company_id
+                    }
+                });
+                return {
+                    companyCategory: Object.assign(Object.assign({}, company), { categories: categories })
+                };
             }
             catch (err) {
                 throw new Error(err);
             }
             finally {
-                yield prisma_1.default.$disconnect(); // sempre fechamos a conexão com DB.
+                yield prismaClient.$disconnect(); // sempre fechamos a conexão com DB.
             }
         });
     }

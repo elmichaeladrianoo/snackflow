@@ -8,17 +8,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ListCategoryController = void 0;
-const ListCategoryService_1 = require("../../services/cetagory/ListCategoryService");
-class ListCategoryController {
-    getCategory(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const { company_id } = req.body;
-            const listCategoryService = new ListCategoryService_1.ListCategoryService();
-            const category = yield listCategoryService.execute({ company_id });
-            return res.json(category);
+exports.DeleteOrderService = void 0;
+const prisma_1 = __importDefault(require("../../prisma"));
+class DeleteOrderService {
+    deleteOrder(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ order_id }) {
+            const deletedOrder = yield prisma_1.default.order.delete({
+                where: {
+                    id: order_id,
+                }
+            });
+            return deletedOrder;
         });
     }
 }
-exports.ListCategoryController = ListCategoryController;
+exports.DeleteOrderService = DeleteOrderService;

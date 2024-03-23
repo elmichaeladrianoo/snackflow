@@ -12,31 +12,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateProductService = void 0;
+exports.CreateOrderService = void 0;
 const prisma_1 = __importDefault(require("../../prisma"));
-class CreateProductService {
-    createProduct(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ name, price, description, bannerBase64, categoryId }) {
-            if (price <= 0) {
-                throw new Error('Preço do produto precisa ser maior que zero!');
-            }
-            // Salvar o produto no banco de dados usando Prisma
-            const product = yield prisma_1.default.product.create({
+class CreateOrderService {
+    execute(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ table, name, company_id, command_id }) {
+            let defaultPrice = 0.0;
+            const order = yield prisma_1.default.order.create({
                 data: {
+                    table: table,
                     name: name,
-                    price: price,
-                    description: description,
-                    banner: bannerBase64, // Salvar o conteúdo base64 diretamente
-                    category_id: categoryId
+                    company_id: company_id,
+                    command_id: command_id,
+                    previousTotAmount: defaultPrice
                 },
-                include: {
-                    category: true
-                }
             });
-            // Formatando a resposta para incluir o campo banner como base64
-            const productWithBase64Banner = Object.assign(Object.assign({}, product), { banner: bannerBase64 });
-            return productWithBase64Banner;
+            return order;
         });
     }
 }
-exports.CreateProductService = CreateProductService;
+exports.CreateOrderService = CreateOrderService;

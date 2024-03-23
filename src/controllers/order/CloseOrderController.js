@@ -9,16 +9,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ListCategoryController = void 0;
-const ListCategoryService_1 = require("../../services/cetagory/ListCategoryService");
-class ListCategoryController {
-    getCategory(req, res) {
+exports.CloseOrderController = void 0;
+const CloseOrderService_1 = require("./../../services/order/CloseOrderService");
+class CloseOrderController {
+    closeOrder(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { company_id } = req.body;
-            const listCategoryService = new ListCategoryService_1.ListCategoryService();
-            const category = yield listCategoryService.execute({ company_id });
-            return res.json(category);
+            const { order_id, applyDiscount, percentDiscount } = req.body;
+            const closeOrderService = new CloseOrderService_1.CloseOrderService();
+            const order = yield closeOrderService.closeOrder({ order_id, applyDiscount, percentDiscount });
+            res.json(order);
         });
     }
 }
-exports.ListCategoryController = ListCategoryController;
+exports.CloseOrderController = CloseOrderController;
