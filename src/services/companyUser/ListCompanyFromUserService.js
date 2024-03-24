@@ -14,19 +14,27 @@ const client_1 = require("@prisma/client");
 const prismaClient = new client_1.PrismaClient();
 class ListCompanyFromUserService {
     listCompanyUser(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ user_id, company_id }) {
-            const companyUser = yield prismaClient.companyUser.findMany({
+        return __awaiter(this, arguments, void 0, function* ({ user_id }) {
+            const companies = yield prismaClient.companyUser.findMany({
                 where: {
-                    OR: [
-                        { user_id: user_id },
-                        { company_id: company_id }
-                    ]
-                }, select: {
-                    user_id: true,
-                    company_id: true
+                    user_id: user_id
+                },
+                include: {
+                    company: true
                 }
             });
-            return companyUser;
+            const companyIds = companies.map(company => company.company_id);
+            const vinculos = yield prismaClient.company.findMany({
+                where: {
+                    id: {
+                        in: companyIds
+                    }
+                }
+            });
+            return {
+                user: user_id,
+                companies: vinculos
+            };
         });
     }
 }

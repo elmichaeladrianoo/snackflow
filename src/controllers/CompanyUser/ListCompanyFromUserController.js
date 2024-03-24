@@ -14,9 +14,9 @@ const ListCompanyFromUserService_1 = require("./../.././services/companyUser/Lis
 class ListCompanyFromUserController {
     listCompanyUser(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { user_id, company_id } = req.body;
+            const { user_id } = req.body;
             const listCompanyUserService = new ListCompanyFromUserService_1.ListCompanyFromUserService();
-            const companyUser = yield listCompanyUserService.listCompanyUser({ user_id, company_id });
+            const companyUser = yield listCompanyUserService.listCompanyUser({ user_id });
             return res.json(companyUser);
         });
     }
