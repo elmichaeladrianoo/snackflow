@@ -34,6 +34,7 @@ import { FinishOrderController } from './controllers/order/FinishOrderController
 import { CreateCommandController } from './controllers/Command/CreateCommandController';
 import { UpdateCommandController } from './controllers/Command/UpdateCommandController';
 import { ListCommandByTableController } from './controllers/Command/ListCommandByTableController';
+import { ListCommandByCompanyController } from './controllers/Command/ListCommandByCompanyController';
 
 const router = Router();
 
@@ -88,6 +89,8 @@ router.delete('/order.orderItemRemove', isAuthenticated(false), new DeleteOrderI
 router.post('/command.commandCreate',isAuthenticated(false), new CreateCommandController().commandCreate)
 router.put('/command.updateCommand', isAuthenticated(false), new UpdateCommandController().updateCommand)
 router.get('/command.commandsByTable', isAuthenticated(false), new ListCommandByTableController().listCommand)
+router.get('/command.commandsByCompany/:company_id', isAuthenticated(false), new ListCommandByCompanyController().listCommand)
+
 //
 
 export { router };

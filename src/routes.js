@@ -37,6 +37,7 @@ const FinishOrderController_1 = require("./controllers/order/FinishOrderControll
 const CreateCommandController_1 = require("./controllers/Command/CreateCommandController");
 const UpdateCommandController_1 = require("./controllers/Command/UpdateCommandController");
 const ListCommandByTableController_1 = require("./controllers/Command/ListCommandByTableController");
+const ListCommandByCompanyController_1 = require("./controllers/Command/ListCommandByCompanyController");
 const router = (0, express_1.Router)();
 exports.router = router;
 // Rotas Status
@@ -81,3 +82,4 @@ router.delete('/order.orderItemRemove', (0, isAuthenticated_1.isAuthenticated)(f
 router.post('/command.commandCreate', (0, isAuthenticated_1.isAuthenticated)(false), new CreateCommandController_1.CreateCommandController().commandCreate);
 router.put('/command.updateCommand', (0, isAuthenticated_1.isAuthenticated)(false), new UpdateCommandController_1.UpdateCommandController().updateCommand);
 router.get('/command.commandsByTable', (0, isAuthenticated_1.isAuthenticated)(false), new ListCommandByTableController_1.ListCommandByTableController().listCommand);
+router.get('/command.commandsByCompany/:company_id', (0, isAuthenticated_1.isAuthenticated)(false), new ListCommandByCompanyController_1.ListCommandByCompanyController().listCommand);

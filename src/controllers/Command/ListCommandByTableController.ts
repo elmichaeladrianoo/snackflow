@@ -4,6 +4,7 @@ import {ListCommandByTableService} from './../../services/Command/ListCommandByT
 
 class ListCommandByTableController {
     async listCommand(req: Request, res: Response){
+        console.log("bateu aqui")
         const { table } = req.body;
         const listCommandByTableService =  new ListCommandByTableService();
 

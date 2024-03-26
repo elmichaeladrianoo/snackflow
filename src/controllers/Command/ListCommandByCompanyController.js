@@ -9,17 +9,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ListCommandByTableController = void 0;
-const ListCommandByTableService_1 = require("./../../services/Command/ListCommandByTableService");
-class ListCommandByTableController {
+exports.ListCommandByCompanyController = void 0;
+const ListCommandByCompanyService_1 = require("./../../services/Command/ListCommandByCompanyService");
+class ListCommandByCompanyController {
     listCommand(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log("bateu aqui");
-            const { table } = req.body;
-            const listCommandByTableService = new ListCommandByTableService_1.ListCommandByTableService();
-            const commands = yield listCommandByTableService.listCommand({ table });
-            res.json(commands);
+            try {
+                const company_id = {
+                    company_id: req.query.company_id // Convertendo para string
+                };
+                const listCommandByCompanyService = new ListCommandByCompanyService_1.ListCommandByCompanyService();
+                const commands = yield listCommandByCompanyService.listCommand(company_id);
+                return res.json(commands);
+            }
+            catch (error) {
+                return res.status(500).json({ error: 'Internal Server Error' });
+            }
         });
     }
 }
-exports.ListCommandByTableController = ListCommandByTableController;
+exports.ListCommandByCompanyController = ListCommandByCompanyController;
