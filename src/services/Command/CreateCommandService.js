@@ -23,7 +23,8 @@ class CreateCommandService {
                     nameAlias: nameAlias,
                     company_id: company_id,
                     virtual: virtual,
-                    finallyTotAmount: defaultPrice
+                    finallyTotAmount: defaultPrice,
+                    available: true
                 }
             });
             return command;

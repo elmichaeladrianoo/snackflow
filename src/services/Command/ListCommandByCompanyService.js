@@ -21,7 +21,8 @@ class ListCommandByCompanyService {
                 console.log(company_id);
                 const command = yield prisma_1.default.command.findMany({
                     where: {
-                        company_id: parseInt(company_id)
+                        company_id: parseInt(company_id),
+                        available: true
                     }, select: {
                         id: true,
                         nameAlias: true

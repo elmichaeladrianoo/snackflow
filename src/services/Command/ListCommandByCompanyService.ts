@@ -13,8 +13,8 @@ class ListCommandByCompanyService{
                     
                     where:{
 
-                            company_id: parseInt(company_id)
-
+                            company_id: parseInt(company_id),
+                            available : true
                     }, select:{
                             id : true,
                             nameAlias : true
