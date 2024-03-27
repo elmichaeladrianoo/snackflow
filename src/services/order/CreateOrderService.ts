@@ -14,18 +14,23 @@ class CreateOrderService {
 
   async execute({ table, name , company_id, command_id}: OrderRequest) {
     let defaultPrice = 0.0
-    const order = await prismaClient.order.create({
-      data: {
-        table: table,
-        name: name,
-        company_id: company_id,
-        command_id:command_id,
-        previousTotAmount:defaultPrice
-      },
-    });
+    try {
+      const order = await prismaClient.order.create({
+        data: {
+          table: table,
+          name: name,
+          company_id: company_id,
+          command_id:command_id,
+          previousTotAmount:defaultPrice
+        },
+      });
 
-    return order;
+      return order;
+    }catch(err){
+      throw new Error(err)
+    }finally{
+     prismaClient.$disconnect()
+   } 
   }
 }
-
 export { CreateOrderService };

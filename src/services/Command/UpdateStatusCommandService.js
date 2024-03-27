@@ -12,26 +12,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateOrderService = void 0;
+exports.UpdateStatusCommandService = void 0;
 const prisma_1 = __importDefault(require("../../prisma"));
-class CreateOrderService {
-    execute(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ table, name, company_id, command_id }) {
-            let defaultPrice = 0.0;
+class UpdateStatusCommandService {
+    updateStatus(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ command_id, status }) {
             try {
-                const order = yield prisma_1.default.order.create({
+                const command = yield prisma_1.default.command.update({
                     data: {
-                        table: table,
-                        name: name,
-                        company_id: company_id,
-                        command_id: command_id,
-                        previousTotAmount: defaultPrice
-                    },
+                        available: status,
+                    }, where: {
+                        id: command_id,
+                    }
                 });
-                return order;
+                return command;
             }
             catch (err) {
-                throw new Error(err);
+                throw new Error("Não foi possível realizar o update");
             }
             finally {
                 prisma_1.default.$disconnect();
@@ -39,4 +36,4 @@ class CreateOrderService {
         });
     }
 }
-exports.CreateOrderService = CreateOrderService;
+exports.UpdateStatusCommandService = UpdateStatusCommandService;

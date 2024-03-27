@@ -17,17 +17,25 @@ const prisma_1 = __importDefault(require("../../prisma"));
 class CreateCommandService {
     createCommand(_a) {
         return __awaiter(this, arguments, void 0, function* ({ nameAlias, company_id, virtual }) {
-            let defaultPrice = 0.0;
-            const command = yield prisma_1.default.command.create({
-                data: {
-                    nameAlias: nameAlias,
-                    company_id: company_id,
-                    virtual: virtual,
-                    finallyTotAmount: defaultPrice,
-                    available: true
-                }
-            });
-            return command;
+            try {
+                let defaultPrice = 0.0;
+                const command = yield prisma_1.default.command.create({
+                    data: {
+                        nameAlias: nameAlias,
+                        company_id: company_id,
+                        virtual: virtual,
+                        finallyTotAmount: defaultPrice,
+                        available: true
+                    }
+                });
+                return command;
+            }
+            catch (err) {
+                throw new Error(err);
+            }
+            finally {
+                prisma_1.default.$disconnect();
+            }
         });
     }
 }

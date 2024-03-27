@@ -9,21 +9,29 @@ interface commandRequest  {
 
 class CreateCommandService{
     async createCommand({nameAlias,company_id,virtual}:commandRequest){
-        let defaultPrice = 0.0
-        const command = await prismaClient.command.create({
 
-            data:{
-                nameAlias:nameAlias,
-                company_id:company_id,
-                virtual:virtual,
-                finallyTotAmount:defaultPrice,
-                available:true
+        try{
+            let defaultPrice = 0.0
+            const command = await prismaClient.command.create({
 
-            }
+                data:{
+                    nameAlias:nameAlias,
+                    company_id:company_id,
+                    virtual:virtual,
+                    finallyTotAmount:defaultPrice,
+                    available:true
 
-        });
-        return command
+                }
 
+            });
+            return command
+        } catch(err){
+            throw new Error(err);
+            
+        }finally{
+            prismaClient.$disconnect()
+
+        }
     }
 
 }
