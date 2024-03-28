@@ -8,7 +8,8 @@ interface orderRequest{
 
 class CloseOrderService{
     async closeOrder({order_id,applyDiscount, percentDiscount}){
-        let newPrice: number;
+        try{
+            let newPrice: number;
        
         const oldOrder = await prismaClient.order.findFirst({
 
@@ -55,6 +56,16 @@ class CloseOrderService{
         })
         return order
 
+
+
+        }catch(err){
+            throw new Error(err)
+
+        }finally{
+            prismaClient.$disconnect();
+
+        }
+        
 
     }
 

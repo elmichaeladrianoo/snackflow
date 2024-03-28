@@ -15,26 +15,34 @@ const prismaClient = new client_1.PrismaClient();
 class ListCompanyFromUserService {
     listCompanyUser(_a) {
         return __awaiter(this, arguments, void 0, function* ({ user_id }) {
-            const companies = yield prismaClient.companyUser.findMany({
-                where: {
-                    user_id: user_id
-                },
-                include: {
-                    company: true
-                }
-            });
-            const companyIds = companies.map(company => company.company_id);
-            const vinculos = yield prismaClient.company.findMany({
-                where: {
-                    id: {
-                        in: companyIds
+            try {
+                const companies = yield prismaClient.companyUser.findMany({
+                    where: {
+                        user_id: user_id
+                    },
+                    include: {
+                        company: true
                     }
-                }
-            });
-            return {
-                user: user_id,
-                companies: vinculos
-            };
+                });
+                const companyIds = companies.map(company => company.company_id);
+                const vinculos = yield prismaClient.company.findMany({
+                    where: {
+                        id: {
+                            in: companyIds
+                        }
+                    }
+                });
+                return {
+                    user: user_id,
+                    companies: vinculos
+                };
+            }
+            catch (err) {
+                throw new Error(err);
+            }
+            finally {
+                prismaClient.$disconnect();
+            }
         });
     }
 }

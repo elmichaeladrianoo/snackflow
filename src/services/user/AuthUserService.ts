@@ -47,6 +47,9 @@ class AuthUserService {
             };
         } catch (error) {
             throw new Error("Erro ao autenticar usuário: " + error.message);
+        }finally{
+
+            prismaClient.$disconnect();
         }
     }
 }

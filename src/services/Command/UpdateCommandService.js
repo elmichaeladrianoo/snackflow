@@ -17,15 +17,23 @@ const prisma_1 = __importDefault(require("../../prisma"));
 class UpdateCommandService {
     updateCommand(_a) {
         return __awaiter(this, arguments, void 0, function* ({ command_id, nameAlias, virtual }) {
-            const command = yield prisma_1.default.command.update({
-                data: {
-                    nameAlias: nameAlias,
-                    virtual: virtual
-                }, where: {
-                    id: command_id,
-                }
-            });
-            return command;
+            try {
+                const command = yield prisma_1.default.command.update({
+                    data: {
+                        nameAlias: nameAlias,
+                        virtual: virtual
+                    }, where: {
+                        id: command_id,
+                    }
+                });
+                return command;
+            }
+            catch (err) {
+                throw new Error(err);
+            }
+            finally {
+                prisma_1.default.$disconnect();
+            }
         });
     }
 }

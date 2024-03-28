@@ -17,12 +17,20 @@ const prisma_1 = __importDefault(require("../../prisma"));
 class DeleteOrderService {
     deleteOrder(_a) {
         return __awaiter(this, arguments, void 0, function* ({ order_id }) {
-            const deletedOrder = yield prisma_1.default.order.delete({
-                where: {
-                    id: order_id,
-                }
-            });
-            return deletedOrder;
+            try {
+                const deletedOrder = yield prisma_1.default.order.delete({
+                    where: {
+                        id: order_id,
+                    }
+                });
+                return deletedOrder;
+            }
+            catch (err) {
+                throw new Error(err);
+            }
+            finally {
+                prisma_1.default.$disconnect();
+            }
         });
     }
 }

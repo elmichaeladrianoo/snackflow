@@ -17,14 +17,22 @@ const prisma_1 = __importDefault(require("../../prisma"));
 class FinishOrderService {
     finishOrder(_a) {
         return __awaiter(this, arguments, void 0, function* ({ order_id }) {
-            const order = prisma_1.default.order.update({
-                data: {
-                    status: true
-                }, where: {
-                    id: order_id
-                }
-            });
-            return order;
+            try {
+                const order = prisma_1.default.order.update({
+                    data: {
+                        status: true
+                    }, where: {
+                        id: order_id
+                    }
+                });
+                return order;
+            }
+            catch (err) {
+                throw new Error(err);
+            }
+            finally {
+                prisma_1.default.$disconnect();
+            }
         });
     }
 }

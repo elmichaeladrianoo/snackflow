@@ -17,30 +17,38 @@ const prisma_1 = __importDefault(require("../../prisma"));
 class ListOrderService {
     listOrder(_a) {
         return __awaiter(this, arguments, void 0, function* ({ order_id, company_id, draft, status, table, name }) {
-            let where = {};
-            // Adicionar condições à consulta com base nos parâmetros fornecidos
-            if (order_id) {
-                where.id = order_id;
+            try {
+                let where = {};
+                // Adicionar condições à consulta com base nos parâmetros fornecidos
+                if (order_id) {
+                    where.id = order_id;
+                }
+                if (company_id) {
+                    where.company_id = company_id;
+                }
+                if (draft !== undefined) {
+                    where.draft = draft;
+                }
+                if (status !== undefined) {
+                    where.status = status;
+                }
+                if (table !== undefined) {
+                    where.table = table;
+                }
+                if (name) {
+                    where.name = name;
+                }
+                const orders = yield prisma_1.default.order.findMany({
+                    where: where,
+                });
+                return orders;
             }
-            if (company_id) {
-                where.company_id = company_id;
+            catch (err) {
+                throw new Error(err);
             }
-            if (draft !== undefined) {
-                where.draft = draft;
+            finally {
+                prisma_1.default.$disconnect();
             }
-            if (status !== undefined) {
-                where.status = status;
-            }
-            if (table !== undefined) {
-                where.table = table;
-            }
-            if (name) {
-                where.name = name;
-            }
-            const orders = yield prisma_1.default.order.findMany({
-                where: where,
-            });
-            return orders;
         });
     }
 }

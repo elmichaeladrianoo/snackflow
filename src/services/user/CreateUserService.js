@@ -56,6 +56,9 @@ class CreateUserService {
             catch (err) {
                 throw err; // Permitir que o erro original seja propagado
             }
+            finally {
+                prisma_1.default.$disconnect();
+            }
         });
     }
 }

@@ -17,12 +17,20 @@ const prisma_1 = __importDefault(require("../../prisma"));
 class ListProductByCategoryService {
     execute(_a) {
         return __awaiter(this, arguments, void 0, function* ({ category_id }) {
-            const findByCategory = yield prisma_1.default.product.findMany({
-                where: {
-                    category_id: category_id
-                }
-            });
-            return findByCategory;
+            try {
+                const findByCategory = yield prisma_1.default.product.findMany({
+                    where: {
+                        category_id: category_id
+                    }
+                });
+                return findByCategory;
+            }
+            catch (err) {
+                throw new Error(err);
+            }
+            finally {
+                prisma_1.default.$disconnect();
+            }
         });
     }
 }

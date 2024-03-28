@@ -5,16 +5,28 @@ interface orderRequest{
 
 class FinishOrderService{
     async finishOrder({order_id}:orderRequest){
-        const order = prismaClient.order.update({
+        try{
+            const order = prismaClient.order.update({
 
-            data:{
-                status:true
-            }, where:{
-                id: order_id
-            }
+                data:{
+                    status:true
+                }, where:{
+                    id: order_id
+                }
+    
+            });
+            return order
 
-        });
-        return order
+
+
+        }catch(err){
+            throw new Error(err)
+
+        }finally{
+
+            prismaClient.$disconnect()
+        }
+        
 
     }
 }

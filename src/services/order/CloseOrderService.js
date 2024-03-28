@@ -17,39 +17,47 @@ const prisma_1 = __importDefault(require("../../prisma"));
 class CloseOrderService {
     closeOrder(_a) {
         return __awaiter(this, arguments, void 0, function* ({ order_id, applyDiscount, percentDiscount }) {
-            let newPrice;
-            const oldOrder = yield prisma_1.default.order.findFirst({
-                where: {
-                    id: order_id
+            try {
+                let newPrice;
+                const oldOrder = yield prisma_1.default.order.findFirst({
+                    where: {
+                        id: order_id
+                    }
+                });
+                if (!oldOrder) {
+                    throw new Error('Pedido não encontrado!');
                 }
-            });
-            if (!oldOrder) {
-                throw new Error('Pedido não encontrado!');
+                if (applyDiscount) {
+                    if (percentDiscount <= 0) {
+                        throw new Error('percentual de desconto precisa ser maior que 0 ');
+                    }
+                    if (percentDiscount > 100) {
+                        throw new Error('percentual de desconto precisa ser entre 1 e 100 ');
+                    }
+                    newPrice = oldOrder.previousTotAmount - (oldOrder.previousTotAmount * (percentDiscount / 100));
+                }
+                else {
+                    newPrice = oldOrder.previousTotAmount;
+                }
+                const order = yield prisma_1.default.order.update({
+                    data: {
+                        draft: false,
+                        applyDiscount: applyDiscount,
+                        percentDiscount: percentDiscount,
+                        finallyTotAmount: newPrice
+                    },
+                    where: {
+                        id: order_id
+                    }
+                });
+                return order;
             }
-            if (applyDiscount) {
-                if (percentDiscount <= 0) {
-                    throw new Error('percentual de desconto precisa ser maior que 0 ');
-                }
-                if (percentDiscount > 100) {
-                    throw new Error('percentual de desconto precisa ser entre 1 e 100 ');
-                }
-                newPrice = oldOrder.previousTotAmount - (oldOrder.previousTotAmount * (percentDiscount / 100));
+            catch (err) {
+                throw new Error(err);
             }
-            else {
-                newPrice = oldOrder.previousTotAmount;
+            finally {
+                prisma_1.default.$disconnect();
             }
-            const order = yield prisma_1.default.order.update({
-                data: {
-                    draft: false,
-                    applyDiscount: applyDiscount,
-                    percentDiscount: percentDiscount,
-                    finallyTotAmount: newPrice
-                },
-                where: {
-                    id: order_id
-                }
-            });
-            return order;
         });
     }
 }

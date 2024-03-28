@@ -15,45 +15,53 @@ const prisma = new client_1.PrismaClient();
 class DeleteOrderItemService {
     deleteItem(_a) {
         return __awaiter(this, arguments, void 0, function* ({ order_id, item_id }) {
-            const deletedOrderItem = yield prisma.item.findUnique({
-                where: {
-                    id: item_id
-                }
-            });
-            if (!deletedOrderItem) {
-                throw new Error('Item de pedido não encontrado');
-            }
-            const product = yield prisma.product.findUnique({
-                where: {
-                    id: deletedOrderItem.product_id
-                },
-                select: {
-                    price: true
-                }
-            });
-            if (!product) {
-                throw new Error('Produto não encontrado');
-            }
-            const priceRemove = deletedOrderItem.amount * product.price;
-            const OrderUpdated = yield prisma.order.update({
-                data: {
-                    previousTotAmount: {
-                        decrement: priceRemove
+            try {
+                const deletedOrderItem = yield prisma.item.findUnique({
+                    where: {
+                        id: item_id
                     }
-                },
-                where: {
-                    id: order_id
+                });
+                if (!deletedOrderItem) {
+                    throw new Error('Item de pedido não encontrado');
                 }
-            });
-            const deletedItem = yield prisma.item.delete({
-                where: {
-                    id: item_id
+                const product = yield prisma.product.findUnique({
+                    where: {
+                        id: deletedOrderItem.product_id
+                    },
+                    select: {
+                        price: true
+                    }
+                });
+                if (!product) {
+                    throw new Error('Produto não encontrado');
                 }
-            });
-            return {
-                order: OrderUpdated,
-                "itemDeleted": deletedItem,
-            };
+                const priceRemove = deletedOrderItem.amount * product.price;
+                const OrderUpdated = yield prisma.order.update({
+                    data: {
+                        previousTotAmount: {
+                            decrement: priceRemove
+                        }
+                    },
+                    where: {
+                        id: order_id
+                    }
+                });
+                const deletedItem = yield prisma.item.delete({
+                    where: {
+                        id: item_id
+                    }
+                });
+                return {
+                    order: OrderUpdated,
+                    "itemDeleted": deletedItem,
+                };
+            }
+            catch (err) {
+                throw new Error(err);
+            }
+            finally {
+                prisma.$disconnect();
+            }
         });
     }
 }

@@ -17,13 +17,21 @@ const prisma_1 = __importDefault(require("../../prisma"));
 class DeleteCompanyUserService {
     deleteCompanyUser(_a) {
         return __awaiter(this, arguments, void 0, function* ({ user_id, company_id }) {
-            const deletedCompanyUser = yield prisma_1.default.companyUser.deleteMany({
-                where: {
-                    user_id: user_id,
-                    company_id: company_id
-                }
-            });
-            return deletedCompanyUser;
+            try {
+                const deletedCompanyUser = yield prisma_1.default.companyUser.deleteMany({
+                    where: {
+                        user_id: user_id,
+                        company_id: company_id
+                    }
+                });
+                return deletedCompanyUser;
+            }
+            catch (err) {
+                throw new Error(err);
+            }
+            finally {
+                prisma_1.default.$disconnect();
+            }
         });
     }
 }

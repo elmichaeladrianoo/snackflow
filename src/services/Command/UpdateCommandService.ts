@@ -8,20 +8,32 @@ interface commandRequest{
 
 class UpdateCommandService{
     async updateCommand({command_id, nameAlias, virtual}){
+
+        try{
+            const command = await prismaClient.command.update({
+
+                data:{
+                    nameAlias: nameAlias,
+                    virtual  : virtual
     
-        const command = await prismaClient.command.update({
+                },where:{
+                    id: command_id,
+              
+                }
+               
+            });
+            return command
 
-            data:{
-                nameAlias: nameAlias,
-                virtual  : virtual
+        }catch(err){
+            throw new Error(err);
+            
 
-            },where:{
-                id: command_id,
-          
-            }
-           
-        });
-        return command
+        }finally{
+            prismaClient.$disconnect();
+
+        }
+    
+        
     }
 
 }

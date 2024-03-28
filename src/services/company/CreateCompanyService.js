@@ -50,6 +50,9 @@ class CreateCompanyService {
             catch (err) {
                 throw new Error(err);
             }
+            finally {
+                prismaClient.$disconnect();
+            }
         });
     }
 }

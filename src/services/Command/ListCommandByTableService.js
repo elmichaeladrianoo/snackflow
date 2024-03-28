@@ -56,7 +56,10 @@ class ListCommandByTableService {
             }
             catch (error) {
                 console.error('Erro ao listar comandos:', error);
-                throw error;
+                throw new Error(error);
+            }
+            finally {
+                prisma_1.default.$disconnect();
             }
         });
     }
