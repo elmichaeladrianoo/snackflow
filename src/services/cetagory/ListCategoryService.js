@@ -16,12 +16,12 @@ class ListCategoryService {
     execute(_a) {
         return __awaiter(this, arguments, void 0, function* ({ company_id }) {
             if (!company_id) {
-                throw new Error("Informe a Empresa!");
+                throw new Error("Informe a empresa!");
             }
             try {
                 const company = yield prismaClient.company.findFirst({
                     where: {
-                        id: company_id
+                        id: parseInt(company_id)
                     }
                 });
                 if (!company) {
@@ -29,7 +29,7 @@ class ListCategoryService {
                 }
                 const categories = yield prismaClient.category.findMany({
                     where: {
-                        company_id: company_id
+                        company_id: parseInt(company_id)
                     }
                 });
                 return {
@@ -37,10 +37,10 @@ class ListCategoryService {
                 };
             }
             catch (err) {
-                throw new Error(err);
+                throw new Error("Erro ao buscar categorias: " + err.message);
             }
             finally {
-                yield prismaClient.$disconnect(); // sempre fechamos a conexão com DB.
+                yield prismaClient.$disconnect(); // Sempre fechamos a conexão com o banco de dados.
             }
         });
     }

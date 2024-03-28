@@ -14,10 +14,15 @@ const ListCategoryService_1 = require("../../services/cetagory/ListCategoryServi
 class ListCategoryController {
     getCategory(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { company_id } = req.body;
-            const listCategoryService = new ListCategoryService_1.ListCategoryService();
-            const category = yield listCategoryService.execute({ company_id });
-            return res.json(category);
+            const { company_id } = req.query;
+            if (typeof company_id === 'string') {
+                const listCategoryService = new ListCategoryService_1.ListCategoryService();
+                const category = yield listCategoryService.execute({ company_id });
+                return res.json(category);
+            }
+            else {
+                return res.status(400).json({ error: 'Invalid company_id' });
+            }
         });
     }
 }

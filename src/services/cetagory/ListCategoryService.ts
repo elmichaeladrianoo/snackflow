@@ -3,19 +3,19 @@ import { PrismaClient } from '@prisma/client';
 const prismaClient = new PrismaClient();
 
 interface CategoryRequest {
-    company_id: number;
+    company_id: string;
 }
 
 class ListCategoryService {
     async execute({ company_id }: CategoryRequest) {
         if (!company_id) {
-            throw new Error("Informe a Empresa!");
+            throw new Error("Informe a empresa!");
         }
 
         try {
             const company = await prismaClient.company.findFirst({
                 where: {
-                    id: company_id
+                    id: parseInt(company_id)
                 }
             });
 
@@ -25,7 +25,7 @@ class ListCategoryService {
 
             const categories = await prismaClient.category.findMany({
                 where: {
-                    company_id: company_id
+                    company_id: parseInt(company_id)
                 }
             });
 
@@ -36,9 +36,9 @@ class ListCategoryService {
                 }
             };
         } catch (err) {
-            throw new Error(err);
+            throw new Error("Erro ao buscar categorias: " + err.message);
         } finally {
-            await prismaClient.$disconnect(); // sempre fechamos a conexão com DB.
+            await prismaClient.$disconnect(); // Sempre fechamos a conexão com o banco de dados.
         }
     }
 }
