@@ -1,7 +1,7 @@
 import prismaClient from "../../prisma";
 
 interface ProductRequest{
-    category_id:number;
+    category_id:string;
 
 }
 class ListProductByCategoryService{
@@ -11,7 +11,7 @@ class ListProductByCategoryService{
 
                 where:{
     
-                    category_id: category_id
+                    category_id: parseInt(category_id)
                 }
     
     

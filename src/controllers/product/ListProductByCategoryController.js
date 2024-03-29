@@ -14,10 +14,13 @@ const ListProductByCategoryService_1 = require("./../../services/product/ListPro
 class ListProductByCategoryController {
     getProductsByCategory(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const category_id = req.body.category_id;
-            const listProductByCategoryService = new ListProductByCategoryService_1.ListProductByCategoryService();
-            const products = yield listProductByCategoryService.execute({ category_id });
-            return res.json(products);
+            // const category_id = req.body.category_id 
+            const { category_id } = req.query;
+            if (typeof category_id === 'string') {
+                const listProductByCategoryService = new ListProductByCategoryService_1.ListProductByCategoryService();
+                const products = yield listProductByCategoryService.execute({ category_id });
+                return res.json(products);
+            }
         });
     }
 }

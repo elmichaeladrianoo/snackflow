@@ -20,7 +20,7 @@ class ListProductByCategoryService {
             try {
                 const findByCategory = yield prisma_1.default.product.findMany({
                     where: {
-                        category_id: category_id
+                        category_id: parseInt(category_id)
                     }
                 });
                 return findByCategory;
