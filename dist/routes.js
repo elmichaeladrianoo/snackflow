@@ -39,6 +39,8 @@ const UpdateCommandController_1 = require("./controllers/Command/UpdateCommandCo
 const ListCommandByTableController_1 = require("./controllers/Command/ListCommandByTableController");
 const ListCommandByCompanyController_1 = require("./controllers/Command/ListCommandByCompanyController");
 const UpdateStatusCommandController_1 = require("./controllers/Command/UpdateStatusCommandController");
+const CreateTableController_1 = require("./controllers/table/CreateTableController");
+const ListTableByCompanyController_1 = require("./controllers/table/ListTableByCompanyController");
 const router = (0, express_1.Router)();
 exports.router = router;
 // Rotas Status
@@ -85,3 +87,6 @@ router.put('/command.updateCommand', (0, isAuthenticated_1.isAuthenticated)(fals
 router.get('/command.commandsByTable', (0, isAuthenticated_1.isAuthenticated)(false), new ListCommandByTableController_1.ListCommandByTableController().listCommand);
 router.get('/command.commandsByCompany/:company_id', (0, isAuthenticated_1.isAuthenticated)(false), new ListCommandByCompanyController_1.ListCommandByCompanyController().listCommand);
 router.put('/command.updateStatus', (0, isAuthenticated_1.isAuthenticated)(false), new UpdateStatusCommandController_1.UpdateStatusCommandController().updatestatus);
+// Rotas Table
+router.post('/table.tableCreate', (0, isAuthenticated_1.isAuthenticated)(false), new CreateTableController_1.CreateTableController().createTable);
+router.get('./table.tables', (0, isAuthenticated_1.isAuthenticated)(false), new ListTableByCompanyController_1.ListTableByCompanyController().listTable);

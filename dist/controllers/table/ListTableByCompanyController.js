@@ -9,16 +9,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateCategoryController = void 0;
-const CreateCategoryService_1 = require("../../services/cetagory/CreateCategoryService");
-class CreateCategoryController {
-    handle(req, res) {
+exports.ListTableByCompanyController = void 0;
+const ListTableByCompanyService_1 = require("./../../services/table/ListTableByCompanyService");
+class ListTableByCompanyController {
+    listTable(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const createCategoryService = new CreateCategoryService_1.CreateCategoryService();
-            const { name } = req.body;
-            const category = yield createCategoryService.execute({ name });
-            return req.res.json(category);
+            const { company_id, status } = req.params;
+            const listTableByCompanyService = new ListTableByCompanyService_1.ListTableByCompanyService();
+            const table = yield listTableByCompanyService.listTableByCompany({ company_id, status });
+            return res.status(200).json(table);
         });
     }
 }
-exports.CreateCategoryController = CreateCategoryController;
+exports.ListTableByCompanyController = ListTableByCompanyController;

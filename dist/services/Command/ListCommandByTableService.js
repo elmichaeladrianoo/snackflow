@@ -16,47 +16,48 @@ exports.ListCommandByTableService = void 0;
 const prisma_1 = __importDefault(require("../../prisma"));
 class ListCommandByTableService {
     listCommand(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ table }) {
+        return __awaiter(this, arguments, void 0, function* ({ table_id, company_id }) {
             try {
-                // Buscar todos os pedidos associados à mesa fornecida
-                const orders = yield prisma_1.default.order.findMany({
+                const table = yield prisma_1.default.table.findFirst({
                     where: {
-                        table: table
+                        id: parseInt(table_id),
+                        company_id: parseInt(company_id),
+                        status: true, // Apenas mesas com status true
                     },
-                    include: {
-                        items: true
+                    select: {
+                        command_id: true
                     }
                 });
-                // Calcular o valor total de cada comanda
-                const commandsPromises = orders.map((order) => __awaiter(this, void 0, void 0, function* () {
-                    const totalAmount = order.items.reduce((acc, item) => {
-                        return acc + item.amount;
-                    }, 0);
-                    const updatedOrder = yield prisma_1.default.order.update({
+                if (table) {
+                    // Extrair os IDs dos comandos
+                    const commandIds = table.command_id;
+                    // Encontrar todas as comandas associadas aos IDs dos comandos
+                    const commands = yield prisma_1.default.command.findMany({
                         where: {
-                            id: order.id
+                            id: commandIds,
+                            available: true // Apenas comandos com status available true
                         },
-                        data: {
-                            finallyTotAmount: totalAmount
+                        select: {
+                            id: true,
+                            nameAlias: true,
+                            available: true,
+                            virtual: true,
+                            finallyTotAmount: true,
+                            created_at: true,
                         }
                     });
-                    return updatedOrder.command_id;
-                }));
-                // Obter os IDs das comandas dos pedidos
-                const commandIds = yield Promise.all(commandsPromises);
-                // Buscar os dados das comandas com base nos IDs obtidos
-                const commands = yield prisma_1.default.command.findMany({
-                    where: {
-                        id: {
-                            in: commandIds
-                        }
-                    }
-                });
-                return commands;
+                    // Retornar os comandos encontrados
+                    return commands;
+                }
+                else {
+                    // Se não houver comandas encontradas, retornar um array vazio
+                    console.log("Não encontrou nenhuma mesa com o ID fornecido");
+                    return [];
+                }
             }
             catch (error) {
                 console.error('Erro ao listar comandos:', error);
-                throw new Error(error);
+                throw new Error("Erro ao listar comandos");
             }
             finally {
                 prisma_1.default.$disconnect();

@@ -20,10 +20,8 @@ class CreateCategoryService{
                 }, select:{
                     id: true,
                     name: true,
-                    company_id:true
-    
+                    company_id:true  
                 }
-    
     
             })
     

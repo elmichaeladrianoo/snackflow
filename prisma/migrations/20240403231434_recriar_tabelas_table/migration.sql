@@ -120,6 +120,17 @@ CREATE TABLE "commands" (
 );
 
 -- CreateTable
+CREATE TABLE "tables" (
+    "id" SERIAL NOT NULL,
+    "alias" TEXT NOT NULL,
+    "status" BOOLEAN NOT NULL DEFAULT false,
+    "company_id" INTEGER NOT NULL,
+    "command_id" INTEGER NOT NULL,
+
+    CONSTRAINT "tables_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "transactionCommands" (
     "id" SERIAL NOT NULL,
     "AlreadyPaid" BOOLEAN NOT NULL DEFAULT false,
@@ -164,6 +175,12 @@ ALTER TABLE "items" ADD CONSTRAINT "items_product_id_fkey" FOREIGN KEY ("product
 
 -- AddForeignKey
 ALTER TABLE "commands" ADD CONSTRAINT "commands_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "Companies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "tables" ADD CONSTRAINT "tables_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "Companies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "tables" ADD CONSTRAINT "tables_command_id_fkey" FOREIGN KEY ("command_id") REFERENCES "commands"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "transactionCommands" ADD CONSTRAINT "transactionCommands_command_id_fkey" FOREIGN KEY ("command_id") REFERENCES "commands"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

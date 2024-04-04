@@ -9,17 +9,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ListCommandByTableController = void 0;
-const ListCommandByTableService_1 = require("./../../services/Command/ListCommandByTableService");
-class ListCommandByTableController {
-    listCommand(req, res) {
+exports.CreateTableController = void 0;
+const CreateTableService_1 = require("./../../services/table/CreateTableService");
+class CreateTableController {
+    createTable(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log("bateu aqui");
-            const { table } = req.body;
-            const listCommandByTableService = new ListCommandByTableService_1.ListCommandByTableService();
-            const commands = yield listCommandByTableService.listCommand({ table });
-            res.json(commands);
+            const { company_id, command_id, alias } = req.body;
+            const createTableService = new CreateTableService_1.CreateTableService();
+            const table = yield createTableService.createTable({ company_id, command_id, alias });
+            return res.status(200).json(table);
         });
     }
 }
-exports.ListCommandByTableController = ListCommandByTableController;
+exports.CreateTableController = CreateTableController;

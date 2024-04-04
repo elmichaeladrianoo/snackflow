@@ -36,6 +36,9 @@ import { UpdateCommandController } from './controllers/Command/UpdateCommandCont
 import { ListCommandByTableController } from './controllers/Command/ListCommandByTableController';
 import { ListCommandByCompanyController } from './controllers/Command/ListCommandByCompanyController';
 import { UpdateStatusCommandController } from './controllers/Command/UpdateStatusCommandController';
+import { CreateTableController } from './controllers/table/CreateTableController';
+import { ListTableByCompanyService } from './services/table/ListTableByCompanyService';
+import { ListTableByCompanyController } from './controllers/table/ListTableByCompanyController';
 
 const router = Router();
 
@@ -93,6 +96,8 @@ router.get('/command.commandsByTable', isAuthenticated(false), new ListCommandBy
 router.get('/command.commandsByCompany/:company_id', isAuthenticated(false), new ListCommandByCompanyController().listCommand)
 router.put('/command.updateStatus', isAuthenticated(false), new UpdateStatusCommandController().updatestatus)
 
-//
+// Rotas Table
+router.post('/table.tableCreate', isAuthenticated(false), new CreateTableController().createTable)
+router.get('./table.tables',isAuthenticated(false),new ListTableByCompanyController().listTable )
 
 export { router };

@@ -1,59 +1,60 @@
 import prismaClient from "../../prisma";
 
 interface CommandRequest {
-    table: number;
+    table_id: string;
+    company_id: string;
+    status:boolean | string;
 }
 
 class ListCommandByTableService {
-    async listCommand({ table }: CommandRequest) {
+    async listCommand({ table_id, company_id }: CommandRequest) {
         try {
-            // Buscar todos os pedidos associados à mesa fornecida
-            const orders = await prismaClient.order.findMany({
+            const table = await prismaClient.table.findFirst({
                 where: {
-                    table: table
+                    id: parseInt(table_id),
+                    company_id: parseInt(company_id),
+                    status: true, // Apenas mesas com status true
                 },
-                include: {
-                    items: true
+                select: {
+                    command_id: true
                 }
             });
 
-            // Calcular o valor total de cada comanda
-            const commandsPromises = orders.map(async (order) => {
-                const totalAmount = order.items.reduce((acc, item) => {
-                    return acc + item.amount;
-                }, 0);
-                const updatedOrder = await prismaClient.order.update({
+            if (table) {
+              
+                const commandIds = table.command_id;
+
+              
+                const commands = await prismaClient.command.findMany({
                     where: {
-                        id: order.id
+                        id: commandIds,
+                        available: false 
                     },
-                    data: {
-                        finallyTotAmount: totalAmount
+                    select: {
+                        id: true,
+                        nameAlias: true,
+                        available: true,
+                        virtual: true,
+                        finallyTotAmount: true,
+                        created_at: true,
                     }
                 });
-                return updatedOrder.command_id;
-            });
 
-            // Obter os IDs das comandas dos pedidos
-            const commandIds = await Promise.all(commandsPromises);
-
-            // Buscar os dados das comandas com base nos IDs obtidos
-            const commands = await prismaClient.command.findMany({
-                where: {
-                    id: {
-                        in: commandIds
-                    }
-                }
-            });
-
-            return commands;
+                // Retornar os comandos encontrados
+                return commands;
+            } else {
+                // Se não houver comandas encontradas, retornar um array vazio
+                console.log("Não encontrou nenhuma mesa com o ID fornecido");
+                return [];
+            }
         } catch (error) {
             console.error('Erro ao listar comandos:', error);
-            throw new Error(error)
-        }finally{
-
+            throw new Error("Erro ao listar comandos");
+        } finally {
             prismaClient.$disconnect();
         }
     }
 }
 
 export { ListCommandByTableService };
+
